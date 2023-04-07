@@ -118,7 +118,7 @@ sub placement_utilization() {
     my $core_area = core_area($def_file, $no_site_rows);                                             # Calculation of core area.
     my $placement_utilization = ($total_cell_area - $total_fill_cell_area) / $core_area * 100;       # Calculation of placement utilization.
 
-    print "$core_area" . "\n";
+    #print "$core_area" . "\n";
 
    return $placement_utilization;
 }
