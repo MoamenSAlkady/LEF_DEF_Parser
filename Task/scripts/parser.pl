@@ -1,21 +1,20 @@
 use strict;
 use warnings;
-use Data::Dumper;
 
 $| = 1;
 
 =pod
 .DEF file parser that calculates no. of site rows and placement utilization.
-Script must be executed in ./Tasks directory.
+Script must be executed in ./Task directory.
 =cut
 
 sub main { 
-    my $def_file = 'Task_1/sources/mips_routed.def';
-    my $lef_file = 'Task_1/sources/NangateOpenCellLibrary.macro.lef';
+    my $def_file = './sources/mips_routed.def';
+    my $lef_file = './sources/NangateOpenCellLibrary.macro.lef';
     my $no_site_rows = no_site_rows($def_file);
     my $placement_utilization = placement_utilization($def_file, $lef_file, $no_site_rows);
-    print "No. of site rows is $no_site_rows" . "\n";
-    print "Placement utilization is $placement_utilization%" . "\n";
+    print "No. of site rows = $no_site_rows" . "\n";
+    print "Placement utilization = $placement_utilization%" . "\n";
 }
 
 sub no_site_rows() {
@@ -50,15 +49,12 @@ sub placement_utilization() {
    my %cell_area;
    for (my $i = 0 ; $i < scalar(@lef_array) ; $i = $i + 3) {
     $cell_area{"$lef_array[$i]"} = $lef_array[$i + 1] * $lef_array[$i + 2];
-   }                                                                                                # Creation of a hash that contains names and areas of cells in LEF.
-   #print Dumper(@lef_array);
-   #print Dumper(%cell_area);
+   }                                                                                                # Creation of a hash that contains names and areas of *ALL* cells in LEF.
    my %cell_no = %cell_area;
    foreach my $cell(keys %cell_no) {
     $cell_no{"$cell"} = 0;
    }
 
-   #print Dumper(%cell_no);
    open(DEF, $def_file) || die "Unable to open $def_file" . "\n";
    while (my $line = <DEF>) {
     chomp $line;
@@ -72,7 +68,6 @@ sub placement_utilization() {
     }                                                                                                # Creation of a hash that contains names and no. of instances of *ALL* cells in design.
    }
    close(DEF);
-   #print Dumper(%cell_no);
 
     my %fill_cell_area;
     my %fill_cell_no;
@@ -86,8 +81,6 @@ sub placement_utilization() {
             $fill_cell_no{$cell} = $cell_no{$cell};
         }
     }                                                                                                # Creation of a hash that contains names and no. of instances of *FILLER* cells in design.
-   #print Dumper(%fill_cell_area);
-   #print Dumper(%fill_cell_no);
 
     my %design_cell_area;
     my %design_fill_cell_area;
@@ -99,9 +92,6 @@ sub placement_utilization() {
         $design_fill_cell_area{$cell} = $fill_cell_area{$cell} * $fill_cell_no{$cell};
     }                                                                                                # Creation of a hash that contains names and areas of *filler* cells in design.
 
-   #print Dumper(%design_cell_area);
-   #print Dumper(%design_fill_cell_area);
-
     my $total_cell_area = 0;
     my $total_fill_cell_area = 0;
 
@@ -112,13 +102,8 @@ sub placement_utilization() {
         $total_fill_cell_area = $total_fill_cell_area + $design_fill_cell_area{$cell};
     }                                                                                                # Calculation of total area of *filler* cells in design.
 
-   #print "$total_cell_area" . "\n";
-   #print "$total_fill_cell_area" . "\n";
-
     my $core_area = core_area($def_file, $no_site_rows);                                             # Calculation of core area.
     my $placement_utilization = ($total_cell_area - $total_fill_cell_area) / $core_area * 100;       # Calculation of placement utilization.
-
-    #print "$core_area" . "\n";
 
    return $placement_utilization;
 }
@@ -150,11 +135,6 @@ sub core_area() {
     }                                                                                               # Extraction of site row information from DEF file.
    }
    close(DEF);
-   #print "$y1" . "\n";
-   #print "$y2" . "\n";
-   #print "$no_sites" . "\n";
-   #print "$site_width" . "\n";
-   #print "$site_height" . "\n";
 
    my $site_row_area = $no_sites * $site_width * $site_height;                                      # Calculation of site row area.
    my $core_area = $no_site_rows * $site_row_area;                                                  # Calculation of core area.
