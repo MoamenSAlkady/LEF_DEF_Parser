@@ -14,8 +14,8 @@ sub main {
     my $lef_file = './sources/NangateOpenCellLibrary.macro.lef';
     my $no_site_rows = no_site_rows($def_file);
     my $placement_utilization = placement_utilization($def_file, $lef_file, $no_site_rows);
-    print "No. of site rows = $no_site_rows" . "\n";
-    print "Placement utilization = $placement_utilization%" . "\n";
+    print "No. of Site Rows = $no_site_rows" . "\n";
+    print "Placement Utilization = $placement_utilization%" . "\n";
 }
 
 sub no_site_rows() {
