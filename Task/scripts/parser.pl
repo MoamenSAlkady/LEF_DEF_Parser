@@ -4,8 +4,9 @@ use warnings;
 $| = 1;
 
 =pod
-.DEF file parser that calculates no. of site rows and placement utilization.
+LEF & DEF file parser that calculates no. of site rows and placement utilization.
 Script must be executed in ./Task directory.
+Created by: Mo'men Salah Alkady
 =cut
 
 sub main { 
