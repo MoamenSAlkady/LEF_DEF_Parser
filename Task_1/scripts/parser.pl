@@ -44,13 +44,13 @@ sub placement_utilization() {
     if ($line =~ /\s*SIZE\s*([\d\.]+)\s*BY\s*([\d\.]+)/) {
         push @lef_array, $1, $2;
     }
-   }
+   }                                                                                                # Creation of an array that contains names, widths, and heights of cells in LEF.
    close(LEF);
 
    my %cell_area;
    for (my $i = 0 ; $i < scalar(@lef_array) ; $i = $i + 3) {
     $cell_area{"$lef_array[$i]"} = $lef_array[$i + 1] * $lef_array[$i + 2];
-   }
+   }                                                                                                # Creation of a hash that contains names and areas of cells in LEF.
    #print Dumper(@lef_array);
    #print Dumper(%cell_area);
    my %cell_no = %cell_area;
@@ -69,7 +69,7 @@ sub placement_utilization() {
         if ($line =~ /\s*$cell\s*/) {
             $cell_no{$cell} = $cell_no{$cell} + 1;
         }
-    }
+    }                                                                                                # Creation of a hash that contains names and no. of instances of *ALL* cells in design.
    }
    close(DEF);
    #print Dumper(%cell_no);
@@ -80,12 +80,12 @@ sub placement_utilization() {
         if ($cell =~ /fill|tap/i) {
             $fill_cell_area{$cell} = $cell_area{$cell};
         }
-    }
+    }                                                                                                # Creation of a hash that contains names and areas of *FILLER* cells in LEF.
     foreach my $cell(keys %cell_no) {
         if ($cell =~ /fill|tap/i) {
             $fill_cell_no{$cell} = $cell_no{$cell};
         }
-    }
+    }                                                                                                # Creation of a hash that contains names and no. of instances of *FILLER* cells in design.
    #print Dumper(%fill_cell_area);
    #print Dumper(%fill_cell_no);
 
@@ -94,10 +94,10 @@ sub placement_utilization() {
 
     foreach my $cell(keys %cell_area) {
         $design_cell_area{$cell} = $cell_area{$cell} * $cell_no{$cell};
-    }
+    }                                                                                                # Creation of a hash that contains names and areas of *ALL* cells in design.
     foreach my $cell(keys %fill_cell_area) {
         $design_fill_cell_area{$cell} = $fill_cell_area{$cell} * $fill_cell_no{$cell};
-    }
+    }                                                                                                # Creation of a hash that contains names and areas of *filler* cells in design.
 
    #print Dumper(%design_cell_area);
    #print Dumper(%design_fill_cell_area);
@@ -107,16 +107,16 @@ sub placement_utilization() {
 
     foreach my $cell(keys %design_cell_area) {
         $total_cell_area = $total_cell_area + $design_cell_area{$cell};
-    }
+    }                                                                                                # Calculation of total area of *ALL* cells in design.
     foreach my $cell(keys %design_fill_cell_area) {
         $total_fill_cell_area = $total_fill_cell_area + $design_fill_cell_area{$cell};
-    }
+    }                                                                                                # Calculation of total area of *filler* cells in design.
 
    #print "$total_cell_area" . "\n";
    #print "$total_fill_cell_area" . "\n";
 
-    my $core_area = core_area($def_file, $no_site_rows);
-    my $placement_utilization = $total_cell_area / $core_area * 100;
+    my $core_area = core_area($def_file, $no_site_rows);                                             # Calculation of core area.
+    my $placement_utilization = ($total_cell_area - $total_fill_cell_area) / $core_area * 100;       # Calculation of placement utilization.
 
     print "$core_area" . "\n";
 
@@ -147,7 +147,7 @@ sub core_area() {
         $y2 = $1;
         $site_height = ($y2 - $y1) / $conversion_factor;
         last;
-    }
+    }                                                                                               # Extraction of site row information from DEF file.
    }
    close(DEF);
    #print "$y1" . "\n";
@@ -156,8 +156,8 @@ sub core_area() {
    #print "$site_width" . "\n";
    #print "$site_height" . "\n";
 
-   my $site_row_area = $no_sites * $site_width * $site_height;
-   my $core_area = $no_site_rows * $site_row_area;
+   my $site_row_area = $no_sites * $site_width * $site_height;                                      # Calculation of site row area.
+   my $core_area = $no_site_rows * $site_row_area;                                                  # Calculation of core area.
 
    return $core_area;
 }
