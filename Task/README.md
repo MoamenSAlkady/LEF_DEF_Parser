@@ -38,6 +38,6 @@ This code goes through different steps so as to parse DEF and LEF files and crea
 * Makefile
 
 ## Execution
-* Unzip Task_Mo'men_Alkady.rar.
+* Unzip Task_Moamen_Alkady.rar.
 * Open terminal in ./Task directory.
 * Enter 'make' command in terminal.
