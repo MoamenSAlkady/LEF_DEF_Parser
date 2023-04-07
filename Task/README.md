@@ -34,6 +34,7 @@ This code goes through different steps so as to parse DEF and LEF files and crea
 
 # Getting Started
 ## Dependencies
+* Linux Environment
 * Perl Language Interpreter
 * Makefile
 
