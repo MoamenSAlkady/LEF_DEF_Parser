@@ -21,7 +21,7 @@ This code goes through different steps so as to parse DEF and LEF files and crea
     * Create variable $total_cell_area from hash %design_cell_area to store total area of all cells in design.
     * Create variable $total_fill_cell_area from hash %design_fill_cell_area to store total area of filler cells in design.
     * Call core_area subroutine to calculate total core area.
-    * Calculate placement utilization by subtracting $total_fill_cell_area from $ total_cell_area and dividing by $core_area.
+    * Calculate placement utilization by subtracting $total_fill_cell_area from $total_cell_area and dividing by $core_area.
 * Total Core Area calculation through core_area subroutine is as follows:
     * Open DEF file.
     * Create variable $conversion_factor by scanning DEF file for conversion factor to store it for any calculations.
